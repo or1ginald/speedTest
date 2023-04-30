@@ -4,9 +4,8 @@
 #include <time.h>
 #include <unistd.h>
 
-#define FILE_URL "https://speed.hetzner.de/1MB.bin" // Loaded file
-#define FILE_SIZE 1000000 // File size in bytes
-#define LOAD_TIME 20
+#define FILE_URL "http://212.183.159.230/20MB.zip" // Loaded file
+#define FILE_SIZE 20000000 // File size in bytes
 
 int main() {
     clock_t start_time, end_time;
@@ -14,10 +13,8 @@ int main() {
     char command[100];
     printf("Testing internet speed...\n");
 
-    sleep(LOAD_TIME);
-
     // Start loading file
-    sprintf(command, "curl -o /dev/null -s -w '%%{time_total}\\n' --max-time %d %s", LOAD_TIME, FILE_URL);
+    sprintf(command, "curl -o /dev/null -s -w '%%{time_total}\\n' %s", FILE_URL);
     start_time = clock();
     system(command);
     end_time = clock();
@@ -25,8 +22,10 @@ int main() {
      // Compute load time
     total_time = ((double) (end_time - start_time)) / CLOCKS_PER_SEC;
 
-    // Compute internet speed
-    speed = (double) FILE_SIZE / total_time / 1000000;
+    printf("-------------- %f\n", total_time);
+
+    // Compute internet speed in seconds
+    speed = (double) FILE_SIZE / 1000000 / total_time ;
 
     // Show result
     printf("Download speed: %.2f Mbps\n", speed);
